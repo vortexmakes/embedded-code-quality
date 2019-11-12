@@ -10,3 +10,8 @@ $ docker run --rm -v local/path/to/project:/usr/project -ti leanfrancucci/ceedli
 ```bash
 $ docker run --rm -v local/path/to/project:/usr/project -ti leanfrancucci/ceedling ceedling test:all
 ```
+
+## Todo
+- Integrate static code analyzers' scripts (uno, cppcheck, ...)
+- Integrate beautifier script (uncrustify)
+- 
