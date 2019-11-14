@@ -1,4 +1,4 @@
-FROM gcc:latest
+FROM gcc:8.3.0
 COPY README.md /
 # Set up a tools dev dierctory
 WORKDIR /home/dev
