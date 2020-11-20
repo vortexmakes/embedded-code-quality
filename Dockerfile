@@ -6,7 +6,8 @@ RUN apt-get -qq update \
     && apt-get -y install bzr ruby-full python-pip \
                           lcov cppcheck uncrustify bison flex \
     && gem install ceedling \
-    && pip install gcovr
+    && pip install gcovr \
+    && pip install gitlint
 
 RUN wget http://www.spinroot.com/uno/uno_v214.tar.gz && \
     tar -xf uno_v214.tar.gz && cd uno/src && \
