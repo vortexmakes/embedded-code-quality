@@ -42,7 +42,7 @@ RUN wget http://www.spinroot.com/uno/uno_v214.tar.gz && \
 # Download, build and install infer
 RUN VERSION=1.1.0 && \
     wget https://github.com/facebook/infer/releases/download/v$VERSION/infer-linux64-v$VERSION.tar.xz && \
-    tar xvf infer-linux64-v$VERSION.tar.xz -C /opt/ && \
+    tar xvf infer-linux64-v$VERSION.tar.xz -C /opt/ && rm -f infer-linux64-v$VERSION.tar.xz && \
     ln -s "/opt/infer-linux64-v$VERSION/bin/infer" /usr/local/bin/infer
 
 WORKDIR /usr/project
