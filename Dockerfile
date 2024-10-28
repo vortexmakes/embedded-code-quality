@@ -16,21 +16,22 @@ RUN apt-get -y update && \
         gcc-multilib \
         g++-multilib \
         build-essential \
-        tzdata \
-        python-backports.functools-lru-cache && \
+        tzdata && \
     gem install ceedling && \
     pip install gcovr && \
     pip install gitlint && \
     rm -rf /var/lib/apt/lists/*
 
 # Download, build and install cmake
-RUN wget https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1.tar.gz && \
-    tar -xvzf cmake-3.21.1.tar.gz
-RUN cd cmake-3.21.1 && \
+ARG CMAKE_VERSION=3.28.0
+RUN wget https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION.tar.gz && \
+    tar -xvzf cmake-$CMAKE_VERSION.tar.gz
+RUN cd cmake-$CMAKE_VERSION && \
     ./bootstrap -- -DCMAKE_USE_OPENSSL=OFF && make && make install && \
     cmake --version && \
-    rm -f /cmake-3.21.1.tar.gz
+    rm -f /cmake-$CMAKE_VERSION.tar.gz
 
+# Download, build and install uno
 RUN wget http://www.spinroot.com/uno/uno_v214.tar.gz && \
     tar -xf uno_v214.tar.gz && cd uno/src && \
     cf='-DPC -ansi -Wall -ggdb -DCPP="\\"gcc -E\\"" -DBINDIR=\\"$(BINDIR)\\"' && \
@@ -40,9 +41,9 @@ RUN wget http://www.spinroot.com/uno/uno_v214.tar.gz && \
     cd / && rm -f uno_v214.tar.gz
 
 # Download, build and install infer
-RUN VERSION=1.1.0 && \
-    wget https://github.com/facebook/infer/releases/download/v$VERSION/infer-linux64-v$VERSION.tar.xz && \
-    tar xvf infer-linux64-v$VERSION.tar.xz -C /opt/ && rm -f infer-linux64-v$VERSION.tar.xz && \
-    ln -s "/opt/infer-linux64-v$VERSION/bin/infer" /usr/local/bin/infer
+ARG INFER_VERSION=1.1.0
+RUN wget https://github.com/facebook/infer/releases/download/v$INFER_VERSION/infer-linux64-v$INFER_VERSION.tar.xz && \
+    tar xvf infer-linux64-v$INFER_VERSION.tar.xz -C /opt/ && rm -f infer-linux64-v$INFER_VERSION.tar.xz && \
+    ln -s "/opt/infer-linux64-v$INFER_VERSION/bin/infer" /usr/local/bin/infer
 
 WORKDIR /usr/project
