@@ -16,11 +16,18 @@ RUN apt-get -y update && \
         gcc-multilib \
         g++-multilib \
         build-essential \
+        clang \
+        clang-tidy \
+        clang-format \
         tzdata && \
-    gem install ceedling && \
-    pip install gcovr && \
-    pip install gitlint && \
     rm -rf /var/lib/apt/lists/*
+RUN gem install \
+        ceedling
+RUN pip install \
+        gcovr \
+        gitlint
+RUN pip3 install \
+        codechecker
 
 # Download, build and install cmake
 ARG CMAKE_VERSION=3.28.0
@@ -45,5 +52,14 @@ ARG INFER_VERSION=1.1.0
 RUN wget https://github.com/facebook/infer/releases/download/v$INFER_VERSION/infer-linux64-v$INFER_VERSION.tar.xz && \
     tar xvf infer-linux64-v$INFER_VERSION.tar.xz -C /opt/ && rm -f infer-linux64-v$INFER_VERSION.tar.xz && \
     ln -s "/opt/infer-linux64-v$INFER_VERSION/bin/infer" /usr/local/bin/infer
+
+# Create a custom user with UID 1234 and GID 1234
+ARG user=appuser
+ARG group=appgroup
+RUN groupadd -g 1000 $group && \
+    useradd -m -u 1000 -g $group $user
+ 
+# Switch to the custom user
+USER $user:$group
 
 WORKDIR /usr/project
